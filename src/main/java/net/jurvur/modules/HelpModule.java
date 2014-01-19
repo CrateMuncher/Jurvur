@@ -21,7 +21,7 @@ public class HelpModule extends Module {
             e.respond("I have PM'd you all my commands and features");
             OutputUser output = e.getUser().send();
 
-            output.message("==========IKNOWALL==========");
+            output.message("==========JURVUR==========");
             output.message("Commands:");
             if (HelpManager.commandsHelp.size() > 0) {
                 for (HelpManager.HelpEntry entry : HelpManager.commandsHelp) {
@@ -39,7 +39,7 @@ public class HelpModule extends Module {
             } else {
                 output.message("None");
             }
-            output.message("==========IKNOWALL==========");
+            output.message("==========JURVUR==========");
         } else {
             OutputChannel output = e.getChannel().send();
             String argsText = StringUtils.join(args, " ");
