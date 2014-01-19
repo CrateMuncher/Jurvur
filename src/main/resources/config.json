@@ -1,9 +1,13 @@
 {
-    "name": "JurVur",
+    "name": "Jurvur",
     "ip": "irc.freenode.net",
     "password": "test",
     "channels": [
         "#bitvid",
         "#jurvur-test"
+    ],
+    "modules": [
+        "net.jurvur.modules.HelpModule",
+        "net.jurvur.modules.RelevantModule"
     ]
 }

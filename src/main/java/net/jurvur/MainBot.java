@@ -1,7 +1,7 @@
 package net.jurvur;
 
 import net.jurvur.modules.HelpModule;
-import net.jurvur.modules.TestModule;
+import net.jurvur.modules.RelevantModule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -20,13 +20,14 @@ public class MainBot extends ListenerAdapter {
     public static JSONObject config;
 
     public static void main(String[] args) throws Exception {
-        InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream("/config.json");
+        InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream("config.json");
         config = (JSONObject) JSONValue.parse(new InputStreamReader(configStream));
 
         modules = new ArrayList<Module>();
 
-        registerModule(TestModule.class);
-        registerModule(HelpModule.class);
+        for (Object moduleName : (JSONArray) config.get("modules")) {
+            registerModule((Class<? extends Module>) Class.forName(moduleName.toString()));
+        }
 
         Configuration.Builder<PircBotX> conf = new Configuration.Builder<PircBotX>()
                 .setName((String) config.get("name"))
