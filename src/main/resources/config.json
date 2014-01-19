@@ -1,0 +1,9 @@
+{
+    "name": "JurVur",
+    "ip": "irc.freenode.net",
+    "password": "test",
+    "channels": [
+        "#bitvid",
+        "#jurvur-test"
+    ]
+}
