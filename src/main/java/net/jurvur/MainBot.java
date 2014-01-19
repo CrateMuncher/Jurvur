@@ -1,7 +1,7 @@
-package net.cratemuncher.jurvur;
+package net.jurvur;
 
-import net.cratemuncher.jurvur.modules.HelpModule;
-import net.cratemuncher.jurvur.modules.TestModule;
+import net.jurvur.modules.HelpModule;
+import net.jurvur.modules.TestModule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;

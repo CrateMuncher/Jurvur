@@ -1,4 +1,4 @@
-package net.cratemuncher.jurvur;
+package net.jurvur;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,7 +1,7 @@
-package net.cratemuncher.jurvur.modules;
+package net.jurvur.modules;
 
-import net.cratemuncher.jurvur.HelpManager;
-import net.cratemuncher.jurvur.Module;
+import net.jurvur.HelpManager;
+import net.jurvur.Module;
 import org.apache.commons.lang3.StringUtils;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.output.OutputChannel;
