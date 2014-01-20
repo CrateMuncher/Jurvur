@@ -15,6 +15,5 @@
         "net.jurvur.modules.NoteModule",
         "net.jurvur.modules.FindReplaceModule"
     ],
-    "get-database-from-heroku": false,
     "shorten-gif-url": true
 }

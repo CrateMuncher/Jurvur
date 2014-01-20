@@ -56,8 +56,9 @@ public class MainBot extends ListenerAdapter {
         dbConfig.setName("jurvur-db");
 
         DataSourceConfig db = new DataSourceConfig();
-        if ((Boolean) config.get("get-database-from-heroku")) {
+        if (System.getenv("DATABASE_URL") != null) {
             URI dbUri = new URI(System.getenv("DATABASE_URL"));
+            System.out.println("Database environment variable found ($DATABASE_URL): \"" + System.getenv("DATABASE_URL") + "\"");
             db.setDriver("org.postgresql.Driver");
             db.setUsername(dbUri.getUserInfo().split(":")[0]);
             db.setPassword(dbUri.getUserInfo().split(":")[1]);
