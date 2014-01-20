@@ -1,7 +1,6 @@
 {
     // Change to your own info!
     // This file is not needed if you're running this on Heroku, just enable "get-database-from-heroku" in the main config and it'll hook up automatically.
-    // Woop woop
     "username": "",
     "password": "",
     "ip": "",
