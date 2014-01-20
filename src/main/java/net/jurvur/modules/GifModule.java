@@ -1,9 +1,9 @@
 package net.jurvur.modules;
 
+import com.github.kevinsawicki.http.HttpRequest;
+import net.jurvur.MainBot;
 import net.jurvur.Module;
-import net.jurvur.Utils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -30,13 +30,19 @@ public class GifModule extends Module {
             }
         }
 
-        String resp = Utils.getHTML(url);
-        JSONObject respJson = (JSONObject) JSONValue.parse(resp);
+        String content = HttpRequest.get(url).body();
+        JSONObject respJson = (JSONObject) JSONValue.parse(content);
 
         if (respJson.get("data") instanceof JSONObject) {
             JSONObject data = (JSONObject) respJson.get("data");
             String imageURL = (String) data.get("image_original_url");
-            e.respond(imageURL);
+            if ((Boolean) MainBot.config.get("shorten-gif-url")) {
+                String googlContent = HttpRequest.post("https://www.googleapis.com/urlshortener/v1/url").contentType("application/json").send("{\"longUrl\": \"" + imageURL + "\"}").body();
+                String shortenedUrl = (String) ((JSONObject) JSONValue.parse(googlContent)).get("id");
+                e.respond(shortenedUrl);
+            } else {
+                e.respond(imageURL);
+            }
         } else {
             e.respond("Not found :(");
         }

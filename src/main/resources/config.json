@@ -10,5 +10,6 @@
         "net.jurvur.modules.HelpModule",
         "net.jurvur.modules.RelevantModule",
         "net.jurvur.modules.GifModule"
-    ]
+    ],
+    "shorten-gif-url": true
 }
