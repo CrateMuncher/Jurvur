@@ -13,7 +13,7 @@ public class HelpModule extends Module {
     public HelpModule() {
         addCommand("help", "handleHelp");
 
-        addHelpCommand("help", "Shows this.", "!help <command>");
+        addHelpCommand("help", "Shows this.", "!help", "!help relevant");
     }
 
     public void handleHelp(MessageEvent e, List<String> args) {
