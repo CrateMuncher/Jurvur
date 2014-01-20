@@ -58,16 +58,16 @@ public class MainBot extends ListenerAdapter {
         DataSourceConfig db = new DataSourceConfig();
         if (System.getenv("DATABASE_URL") != null) {
             URI dbUri = new URI(System.getenv("DATABASE_URL"));
-            System.out.println("Database environment variable found ($DATABASE_URL): \"" + System.getenv("DATABASE_URL") + "\"");
-            System.out.println("Username: " + dbUri.getUserInfo().split(":")[0]);
-            System.out.println("Password: " + dbUri.getUserInfo().split(":")[1]);
-            System.out.println("Host: " + dbUri.getHost());
-            System.out.println("Port: " + dbUri.getPort());
-            System.out.println("Database: " + dbUri.getPath());
-            db.setDriver("org.postgresql.Driver");
+            db.setDriver((String) databaseConfig.get("driver"));
             db.setUsername(dbUri.getUserInfo().split(":")[0]);
             db.setPassword(dbUri.getUserInfo().split(":")[1]);
-            db.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath());
+
+            String dbType = dbUri.getScheme();
+            if (dbType.equalsIgnoreCase("postgres")) {
+                dbType = "postgresql";
+            }
+
+            db.setUrl("jdbc:" + dbType + "://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath());
         } else {
             db.setDriver((String) databaseConfig.get("driver"));
             db.setUsername((String) databaseConfig.get("username"));
