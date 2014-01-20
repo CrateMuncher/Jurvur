@@ -58,7 +58,7 @@ public class MainBot extends ListenerAdapter {
         DataSourceConfig db = new DataSourceConfig();
         if ((Boolean) config.get("get-database-from-heroku")) {
             URI dbUri = new URI(System.getenv("DATABASE_URL"));
-            db.setDriver("org.postgres.Driver");
+            db.setDriver("org.postgresql.Driver");
             db.setUsername(dbUri.getUserInfo().split(":")[0]);
             db.setPassword(dbUri.getUserInfo().split(":")[1]);
             db.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath());
