@@ -21,10 +21,14 @@ public class MainBot extends ListenerAdapter {
     public static List<Module> modules;
 
     public static JSONObject config;
+    public static JSONObject databaseConfig;
 
     public static void main(String[] args) throws Exception {
         InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream("config.json");
         config = (JSONObject) JSONValue.parse(new InputStreamReader(configStream));
+
+        InputStream databaseConfigStream = ClassLoader.getSystemClassLoader().getResourceAsStream("database.json");
+        databaseConfig = (JSONObject) JSONValue.parse(new InputStreamReader(databaseConfigStream));
 
         modules = new ArrayList<Module>();
 
@@ -51,20 +55,18 @@ public class MainBot extends ListenerAdapter {
         ServerConfig dbConfig = new ServerConfig();
         dbConfig.setName("jurvur-db");
 
-        JSONObject dbConfigJson = (JSONObject) config.get("database");
-
         DataSourceConfig db = new DataSourceConfig();
-        if ((Boolean) dbConfigJson.get("heroku")) {
+        if ((Boolean) config.get("get-database-from-heroku")) {
             URI dbUri = new URI(System.getenv("DATABASE_URL"));
             db.setDriver("org.postgres.Driver");
             db.setUsername(dbUri.getUserInfo().split(":")[0]);
             db.setPassword(dbUri.getUserInfo().split(":")[1]);
-            db.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath(););
+            db.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath());
         } else {
-            db.setDriver((String) dbConfigJson.get("driver"));
-            db.setUsername((String) dbConfigJson.get("username"));
-            db.setPassword((String) dbConfigJson.get("password"));
-            db.setUrl("jdbc:" + (String) dbConfigJson.get("type") + "://" + dbConfigJson.get("ip") + ":" + dbConfigJson.get("port") + "/" + dbConfigJson.get("database"));
+            db.setDriver((String) databaseConfig.get("driver"));
+            db.setUsername((String) databaseConfig.get("username"));
+            db.setPassword((String) databaseConfig.get("password"));
+            db.setUrl("jdbc:" + (String) databaseConfig.get("type") + "://" + databaseConfig.get("ip") + ":" + databaseConfig.get("port") + "/" + databaseConfig.get("database"));
         }
         db.setHeartbeatSql("SELECT * FROM note");
         dbConfig.setDataSourceConfig(db);

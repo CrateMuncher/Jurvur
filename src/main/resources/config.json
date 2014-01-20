@@ -14,15 +14,6 @@
         "net.jurvur.modules.GoodBadModule",
         "net.jurvur.modules.NoteModule"
     ],
-    "database": {
-        "heroku": false,
-        "username": "postgres",
-        "password": "poop",
-        "ip": "localhost",
-        "port": 5432,
-        "database": "jurvur",
-        "driver": "org.postgresql.Driver",
-        "type": "postgresql"
-    },
+    "get-database-from-heroku": false,
     "shorten-gif-url": true
 }
