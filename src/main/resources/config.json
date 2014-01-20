@@ -12,7 +12,8 @@
         "net.jurvur.modules.GifModule",
         "net.jurvur.modules.URLTitleModule",
         "net.jurvur.modules.GoodBadModule",
-        "net.jurvur.modules.NoteModule"
+        "net.jurvur.modules.NoteModule",
+        "net.jurvur.modules.FindReplaceModule"
     ],
     "get-database-from-heroku": true,
     "shorten-gif-url": true
