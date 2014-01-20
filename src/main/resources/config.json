@@ -14,6 +14,6 @@
         "net.jurvur.modules.GoodBadModule",
         "net.jurvur.modules.NoteModule"
     ],
-    "get-database-from-heroku": false,
+    "get-database-from-heroku": true,
     "shorten-gif-url": true
 }
