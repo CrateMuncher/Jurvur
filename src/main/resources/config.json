@@ -10,7 +10,16 @@
         "net.jurvur.modules.HelpModule",
         "net.jurvur.modules.RelevantModule",
         "net.jurvur.modules.GifModule",
-        "net.jurvur.modules.URLTitleModule"
+        "net.jurvur.modules.URLTitleModule",
+        "net.jurvur.modules.GoodBadModule",
+        "net.jurvur.modules.NoteModule"
     ],
+    "database": {
+        "username": "postgres",
+        "password": "poop",
+        "ip": "localhost",
+        "port": 5432,
+        "database": "jurvur"
+    },
     "shorten-gif-url": true
 }

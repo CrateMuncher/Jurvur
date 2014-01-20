@@ -1,5 +1,9 @@
 package net.jurvur;
 
+import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.EbeanServerFactory;
+import com.avaje.ebean.config.DataSourceConfig;
+import com.avaje.ebean.config.ServerConfig;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -42,6 +46,27 @@ public class MainBot extends ListenerAdapter {
         for (Module module : modules) {
             conf.addListener(module);
         }
+
+        ServerConfig dbConfig = new ServerConfig();
+        dbConfig.setName("jurvur-db");
+
+        JSONObject dbConfigJson = (JSONObject) config.get("database");
+
+        DataSourceConfig db = new DataSourceConfig();
+        db.setDriver("org.postgresql.Driver");
+        db.setUsername((String) dbConfigJson.get("username"));
+        db.setPassword((String) dbConfigJson.get("password"));
+        db.setUrl("jdbc:postgresql://" + dbConfigJson.get("ip") + ":" + dbConfigJson.get("port") + "/" + dbConfigJson.get("database"));
+        db.setHeartbeatSql("SELECT * FROM note");
+        dbConfig.setDataSourceConfig(db);
+
+        dbConfig.setDdlGenerate(true);
+        dbConfig.setDdlRun(true);
+
+        dbConfig.setDefaultServer(true);
+        dbConfig.setRegister(true);
+
+        EbeanServer server = EbeanServerFactory.create(dbConfig);
 
         PircBotX bot;
         try {

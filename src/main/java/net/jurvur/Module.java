@@ -5,6 +5,8 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,14 +19,20 @@ public abstract class Module extends ListenerAdapter {
     }
 
     protected void addCommand(String command, String methodName) {
-        addPattern("!" + command.trim() + "(?: ([^ ]+))*", methodName);
+        Method m;
+        try {
+            m = this.getClass().getMethod(methodName, MessageEvent.class, List.class);
+            patterns.add(new PatternHandler(Pattern.compile("!"+command), m, true));
+        } catch (NoSuchMethodException e) {
+            // Do something here, eventually, idk.
+        }
     }
 
     protected void addPattern(String regex, String methodName) {
         Method m;
         try {
             m = this.getClass().getMethod(methodName, MessageEvent.class, List.class);
-            patterns.add(new PatternHandler(Pattern.compile(regex), m));
+            patterns.add(new PatternHandler(Pattern.compile(regex), m, false));
         } catch (NoSuchMethodException e) {
             // Do something here, eventually, idk.
         }
@@ -46,17 +54,27 @@ public abstract class Module extends ListenerAdapter {
             Matcher m = p.matcher(msg);
 
             List<String> groups = new ArrayList<String>();
-            while (m.find()) {
-                for (int g = 1; g <= m.groupCount(); g++) {
-                    String group = m.group(g);
-                    if (group != null) {
-                        groups.add(m.group(g));
+            if (ph.command) {
+                if (msg.startsWith(p.pattern())) {
+                    List<String> splittedList = Arrays.asList(msg.split(" "));
+                    for (String arg : splittedList.subList(1, splittedList.size())) {
+                        groups.add(arg);
+                    }
+                    ph.handler.invoke(this, event, groups);
+                }
+            } else {
+                while (m.find()) {
+                    for (int g = 1; g <= m.groupCount(); g++) {
+                        String group = m.group(g);
+                        if (group != null) {
+                            groups.add(m.group(g));
+                        }
                     }
                 }
-            }
 
-            if (m.matches()) {
-                ph.handler.invoke(this, event, groups);
+                if (m.matches()) {
+                    ph.handler.invoke(this, event, groups);
+                }
             }
         }
     }
@@ -64,10 +82,12 @@ public abstract class Module extends ListenerAdapter {
     private class PatternHandler {
         private Pattern pattern;
         private Method handler;
+        private boolean command;
 
-        private PatternHandler(Pattern pattern, Method handler) {
+        private PatternHandler(Pattern pattern, Method handler, boolean command) {
             this.pattern = pattern;
             this.handler = handler;
+            this.command = command;
         }
 
     }
