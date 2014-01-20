@@ -15,6 +15,7 @@
         "net.jurvur.modules.NoteModule"
     ],
     "database": {
+        "heroku": false,
         "username": "postgres",
         "password": "poop",
         "ip": "localhost",

@@ -13,6 +13,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,10 +54,18 @@ public class MainBot extends ListenerAdapter {
         JSONObject dbConfigJson = (JSONObject) config.get("database");
 
         DataSourceConfig db = new DataSourceConfig();
-        db.setDriver((String) dbConfigJson.get("driver"));
-        db.setUsername((String) dbConfigJson.get("username"));
-        db.setPassword((String) dbConfigJson.get("password"));
-        db.setUrl("jdbc:" + (String) dbConfigJson.get("type") + "://" + dbConfigJson.get("ip") + ":" + dbConfigJson.get("port") + "/" + dbConfigJson.get("database"));
+        if ((Boolean) dbConfigJson.get("heroku")) {
+            URI dbUri = new URI(System.getenv("DATABASE_URL"));
+            db.setDriver("org.postgres.Driver");
+            db.setUsername(dbUri.getUserInfo().split(":")[0]);
+            db.setPassword(dbUri.getUserInfo().split(":")[1]);
+            db.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath(););
+        } else {
+            db.setDriver((String) dbConfigJson.get("driver"));
+            db.setUsername((String) dbConfigJson.get("username"));
+            db.setPassword((String) dbConfigJson.get("password"));
+            db.setUrl("jdbc:" + (String) dbConfigJson.get("type") + "://" + dbConfigJson.get("ip") + ":" + dbConfigJson.get("port") + "/" + dbConfigJson.get("database"));
+        }
         db.setHeartbeatSql("SELECT * FROM note");
         dbConfig.setDataSourceConfig(db);
 
