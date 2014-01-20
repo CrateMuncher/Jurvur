@@ -15,7 +15,6 @@
         "net.jurvur.modules.NoteModule",
         "net.jurvur.modules.FindReplaceModule"
     ],
-    // If you're on Heroku, this must be "true". If you're NOT on Heroku, this must be "false", and you must configure your database in database.json.
     "get-database-from-heroku": false,
     "shorten-gif-url": true
 }
