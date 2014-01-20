@@ -1,0 +1,1 @@
+worker:    java -cp target/classes:target/dependency/* net.jurvur.MainBot
