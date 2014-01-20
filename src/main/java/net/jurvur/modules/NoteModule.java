@@ -7,8 +7,8 @@ import org.pircbotx.hooks.events.MessageEvent;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class NoteModule extends Module {
     public NoteModule() {
@@ -21,7 +21,7 @@ public class NoteModule extends Module {
     public void makeNote(MessageEvent e, List<String> args) {
         if (args.size() > 1) {
             String recipient = args.get(0);
-            String noteContent = StringUtils.join(args.subList(1, args.size()-1), recipient, " ");
+            String noteContent = StringUtils.join(args.subList(1, args.size()), " ");
 
             Note note = new Note();
             note.setChannel(e.getChannel().getName());
@@ -30,7 +30,12 @@ public class NoteModule extends Module {
             note.setRecipient(recipient);
             note.setSender(e.getUser().getNick());
 
-            Ebean.save(note);
+
+            try {
+                Ebean.save(note);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             e.respond("Note saved.");
         }
     }
@@ -39,28 +44,32 @@ public class NoteModule extends Module {
         List<Note> ns = Ebean.find(Note.class).where().eq("recipient", e.getUser().getNick()).eq("read", false).eq("channel", e.getChannel().getName()).findList();
 
         if (ns.size() > 0) {
-            String txt = "You have notes: ";
+            e.respond("You have notes: ");
             for (Note n : ns) {
-                txt = txt + "<" + n.getSender() + "> " + n.getContent() + " ";
+                e.respond("<" + n.getSender() + "> " + n.getContent() + " ");
                 n.setRead(true);
                 Ebean.save(n);
             }
-            e.respond(txt);
         }
     }
 
     @Entity
+    @Table(name="note")
     public static class Note {
         @Id
-        int id;
-        String sender;
-        String recipient;
-        String content;
-        String channel;
-        boolean read;
+        private Long id;
+        private String sender = "";
+        private String recipient = "";
+        private String content = "";
+        private String channel = "";
+        private Boolean read = false;
 
-        public int getId() {
+        public Long getId() {
             return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
         }
 
         public String getSender() {
@@ -95,12 +104,13 @@ public class NoteModule extends Module {
             this.channel = channel;
         }
 
-        public boolean isRead() {
+        public Boolean getRead() {
             return read;
         }
 
-        public void setRead(boolean read) {
+        public void setRead(Boolean read) {
             this.read = read;
         }
+
     }
 }
