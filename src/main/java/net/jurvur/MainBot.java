@@ -53,10 +53,10 @@ public class MainBot extends ListenerAdapter {
         JSONObject dbConfigJson = (JSONObject) config.get("database");
 
         DataSourceConfig db = new DataSourceConfig();
-        db.setDriver("org.postgresql.Driver");
+        db.setDriver((String) dbConfigJson.get("driver"));
         db.setUsername((String) dbConfigJson.get("username"));
         db.setPassword((String) dbConfigJson.get("password"));
-        db.setUrl("jdbc:postgresql://" + dbConfigJson.get("ip") + ":" + dbConfigJson.get("port") + "/" + dbConfigJson.get("database"));
+        db.setUrl("jdbc:" + (String) dbConfigJson.get("type") + "://" + dbConfigJson.get("ip") + ":" + dbConfigJson.get("port") + "/" + dbConfigJson.get("database"));
         db.setHeartbeatSql("SELECT * FROM note");
         dbConfig.setDataSourceConfig(db);
 

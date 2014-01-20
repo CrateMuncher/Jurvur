@@ -19,7 +19,9 @@
         "password": "poop",
         "ip": "localhost",
         "port": 5432,
-        "database": "jurvur"
+        "database": "jurvur",
+        "driver": "org.postgresql.Driver",
+        "type": "postgresql"
     },
     "shorten-gif-url": true
 }
