@@ -1,14 +1,15 @@
 package net.jurvur.modules;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.bean.EntityBean;
+import com.avaje.ebean.validation.NotNull;
 import net.jurvur.Module;
 import org.apache.commons.lang3.StringUtils;
 import org.pircbotx.hooks.events.MessageEvent;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 public class NoteModule extends Module {
     public NoteModule() {
@@ -44,12 +45,13 @@ public class NoteModule extends Module {
         List<Note> ns = Ebean.find(Note.class).where().eq("recipient", e.getUser().getNick()).eq("read", false).eq("channel", e.getChannel().getName()).findList();
 
         if (ns.size() > 0) {
-            e.respond("You have notes: ");
+            String txt = "You have notes: ";
             for (Note n : ns) {
-                e.respond("<" + n.getSender() + "> " + n.getContent() + " ");
+                txt = txt + "<" + n.getSender() + "> " + n.getContent() + " ";
                 n.setRead(true);
                 Ebean.save(n);
             }
+            e.respond(txt);
         }
     }
 
