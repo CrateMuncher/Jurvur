@@ -56,10 +56,14 @@ public class MainBot extends ListenerAdapter {
         dbConfig.setName("jurvur-db");
 
         DataSourceConfig db = new DataSourceConfig();
-        System.err.println(System.getenv("DATABASE_URL")); //Debug
         if (System.getenv("DATABASE_URL") != null) {
             URI dbUri = new URI(System.getenv("DATABASE_URL"));
             System.out.println("Database environment variable found ($DATABASE_URL): \"" + System.getenv("DATABASE_URL") + "\"");
+            System.out.println("Username: " + dbUri.getUserInfo().split(":")[0]);
+            System.out.println("Password: " + dbUri.getUserInfo().split(":")[1]);
+            System.out.println("Host: " + dbUri.getHost());
+            System.out.println("Port: " + dbUri.getPort());
+            System.out.println("Database: " + dbUri.getPath());
             db.setDriver("org.postgresql.Driver");
             db.setUsername(dbUri.getUserInfo().split(":")[0]);
             db.setPassword(dbUri.getUserInfo().split(":")[1]);
