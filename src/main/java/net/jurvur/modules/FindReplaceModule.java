@@ -14,7 +14,7 @@ public class FindReplaceModule extends Module {
     HashMap<String, String> lastMessages;
     public FindReplaceModule() {
         lastMessages = new HashMap<String, String>();
-        addPattern("s/([^/]+)/([^/]+)[/]?", "doReplace");
+        addPattern("(?:(.+): )?s/([^/]*)/([^/]*)[/]?", "doReplace");
         addPattern(".*", "log");
 
         addHelpFeature("Find and Replace", "Finds and replaces, with the syntax s/find/replace/.", "<You> This is a tset", "<You> s/tset/test", "What You meant: This is a test");
@@ -28,12 +28,18 @@ public class FindReplaceModule extends Module {
 
     public void doReplace(MessageEvent e, List<String> args) {
         if (lastMessages.containsKey(e.getUser().getNick())) {
-            String lastMsg = lastMessages.get(e.getUser().getNick());
-            String from = args.get(0);
-            String to = args.get(1);
+            String name = args.get(0);
+            String from = args.get(1);
+            String to = args.get(2);
+
+            if (name == null) name = e.getUser().getNick();
+            if (from == null) from = "";
+            if (to == null) to = "";
+
+            String lastMsg = lastMessages.get(name);
 
             String replaced = lastMsg.replaceAll(from, to);
-            e.getChannel().send().message("What " + e.getUser().getNick() + " meant: " + replaced);
+            e.getChannel().send().message("What " + name + " meant: " + replaced);
         }
     }
 }

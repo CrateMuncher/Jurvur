@@ -13,7 +13,8 @@
         "net.jurvur.modules.URLTitleModule",
         "net.jurvur.modules.GoodBadModule",
         "net.jurvur.modules.NoteModule",
-        "net.jurvur.modules.FindReplaceModule"
+        "net.jurvur.modules.FindReplaceModule",
+        "net.jurvur.modules.DiceModule"
     ],
     "server-password": "",
     "shorten-gif-url": true

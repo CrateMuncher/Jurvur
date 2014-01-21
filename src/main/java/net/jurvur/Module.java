@@ -66,9 +66,7 @@ public abstract class Module extends ListenerAdapter {
                 while (m.find()) {
                     for (int g = 1; g <= m.groupCount(); g++) {
                         String group = m.group(g);
-                        if (group != null) {
-                            groups.add(m.group(g));
-                        }
+                        groups.add(m.group(g));
                     }
                 }
 
