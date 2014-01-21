@@ -11,6 +11,7 @@ import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ConnectEvent;
+import org.pircbotx.hooks.events.SocketConnectEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.InputStream;
@@ -28,11 +29,11 @@ public class MainBot extends ListenerAdapter {
 
     @Override
     public void onGenericMessage(GenericMessageEvent event) throws Exception {
-        System.out.println(event.getMessage());
+        System.out.println("<" + event.getUser().getNick() + "> " + event.getMessage());
     }
 
     @Override
-    public void onConnect(ConnectEvent event) throws Exception {
+    public void onSocketConnect(SocketConnectEvent event) throws Exception {
         for (Object line : (JSONArray) config.get("run-on-connect")) {
             event.respond(line.toString());
         }
@@ -85,11 +86,11 @@ public class MainBot extends ListenerAdapter {
 
         Configuration.Builder<PircBotX> conf = new Configuration.Builder<PircBotX>()
                 .setName((String) config.get("name"))
-                .setServerHostname("irc.freenode.net")
-                .addAutoJoinChannel("#jurvur-test")
+                .setServerHostname((String) config.get("ip"))
                 .setAutoNickChange(true)
                 .setAutoReconnect(true)
                 .addListener(new MainBot())
+                .setServerPassword((String) config.get("server-password"))
                 .setNickservPassword((String) config.get("password"));
 
         for (Object chnl : (JSONArray) config.get("channels")) {

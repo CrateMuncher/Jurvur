@@ -15,7 +15,6 @@
         "net.jurvur.modules.NoteModule",
         "net.jurvur.modules.FindReplaceModule"
     ],
-    "run-on-connect": [
-    ],
+    "server-password": "",
     "shorten-gif-url": true
 }
