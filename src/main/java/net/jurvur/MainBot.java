@@ -11,6 +11,7 @@ import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.ConnectEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,6 +25,11 @@ public class MainBot extends ListenerAdapter {
 
     public static JSONObject config;
     public static JSONObject databaseConfig;
+
+    @Override
+    public void onGenericMessage(GenericMessageEvent event) throws Exception {
+        System.out.println(event.getMessage());
+    }
 
     @Override
     public void onConnect(ConnectEvent event) throws Exception {
