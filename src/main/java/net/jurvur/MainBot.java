@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainBot extends ListenerAdapter {
@@ -29,6 +30,37 @@ public class MainBot extends ListenerAdapter {
 
         InputStream databaseConfigStream = ClassLoader.getSystemClassLoader().getResourceAsStream("database.json");
         databaseConfig = (JSONObject) JSONValue.parse(new InputStreamReader(databaseConfigStream));
+
+        for (String k : System.getenv().keySet()) {
+            String v = System.getenv(k);
+            if (k.startsWith("JURVUR_")) {
+                boolean database = false;
+                String adjustedK;
+                if (k.startsWith("JURVUR_DATABASE_")) {
+                    adjustedK = k.substring(16).toLowerCase().replaceAll("_", "-");
+                    database = true;
+                } else {
+                    adjustedK = k.substring(7).toLowerCase().replaceAll("_", "-");
+                }
+
+
+                List<String> pieces;
+                if (adjustedK.contains(".")) {
+                    pieces = Arrays.asList(adjustedK.split("\\."));
+                } else {
+                    pieces = Arrays.asList(adjustedK);
+                }
+
+                JSONObject obj = database ? databaseConfig : config;
+                while (pieces.size() > 1) {
+                    obj = (JSONObject) obj.get(pieces.get(0));
+                    pieces = pieces.subList(1, pieces.size());
+                }
+                if (obj != null) {
+                    obj.put(pieces.get(0), JSONValue.parse(v));
+                }
+            }
+        }
 
         modules = new ArrayList<Module>();
 
