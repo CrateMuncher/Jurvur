@@ -15,5 +15,7 @@
         "net.jurvur.modules.NoteModule",
         "net.jurvur.modules.FindReplaceModule"
     ],
+    "run-on-connect": [
+    ],
     "shorten-gif-url": true
 }

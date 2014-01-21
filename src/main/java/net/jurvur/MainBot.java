@@ -10,6 +10,7 @@ import org.json.simple.JSONValue;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.ConnectEvent;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,6 +24,13 @@ public class MainBot extends ListenerAdapter {
 
     public static JSONObject config;
     public static JSONObject databaseConfig;
+
+    @Override
+    public void onConnect(ConnectEvent event) throws Exception {
+        for (Object line : (JSONArray) config.get("run-on-connect")) {
+            event.respond(line.toString());
+        }
+    }
 
     public static void main(String[] args) throws Exception {
         InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream("config.json");
@@ -74,6 +82,7 @@ public class MainBot extends ListenerAdapter {
                 .addAutoJoinChannel("#jurvur-test")
                 .setAutoNickChange(true)
                 .setAutoReconnect(true)
+                .addListener(new MainBot())
                 .setNickservPassword((String) config.get("password"));
 
         for (Object chnl : (JSONArray) config.get("channels")) {
