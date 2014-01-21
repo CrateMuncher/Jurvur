@@ -32,13 +32,6 @@ public class MainBot extends ListenerAdapter {
         System.out.println("<" + event.getUser().getNick() + "> " + event.getMessage());
     }
 
-    @Override
-    public void onSocketConnect(SocketConnectEvent event) throws Exception {
-        for (Object line : (JSONArray) config.get("run-on-connect")) {
-            event.respond(line.toString());
-        }
-    }
-
     public static void main(String[] args) throws Exception {
         InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream("config.json");
         config = (JSONObject) JSONValue.parse(new InputStreamReader(configStream));
