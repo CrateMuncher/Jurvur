@@ -13,6 +13,7 @@ import java.util.List;
 public class FindReplaceModule extends Module {
     HashMap<String, String> lastMessages;
     public FindReplaceModule() {
+        lastMessages = new HashMap<String, String>();
         addPattern("s/([^/]+)/([^/]+)[/]?", "doReplace");
         addPattern(".*", "log");
 
@@ -26,11 +27,13 @@ public class FindReplaceModule extends Module {
     }
 
     public void doReplace(MessageEvent e, List<String> args) {
-        String lastMsg = lastMessages.get(e.getUser().getNick());
-        String from = args.get(0);
-        String to = args.get(1);
+        if (lastMessages.containsKey(e.getUser().getNick())) {
+            String lastMsg = lastMessages.get(e.getUser().getNick());
+            String from = args.get(0);
+            String to = args.get(1);
 
-        String replaced = lastMsg.replaceAll(from, to);
-        e.getChannel().send().message("What " + e.getUser().getNick() + " meant: " + replaced);
+            String replaced = lastMsg.replaceAll(from, to);
+            e.getChannel().send().message("What " + e.getUser().getNick() + " meant: " + replaced);
+        }
     }
 }
