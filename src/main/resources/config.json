@@ -17,5 +17,6 @@
         "net.jurvur.modules.DiceModule"
     ],
     "server-password": "",
+    "find-replace-lookback": 5,
     "shorten-gif-url": true
 }

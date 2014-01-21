@@ -1,19 +1,15 @@
 package net.jurvur.modules;
 
-import net.jurvur.HelpManager;
+import net.jurvur.MainBot;
 import net.jurvur.Module;
-import org.apache.commons.lang3.StringUtils;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.output.OutputChannel;
-import org.pircbotx.output.OutputUser;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class FindReplaceModule extends Module {
-    HashMap<String, String> lastMessages;
+    HashMap<String, List<String>> lastMessages;
     public FindReplaceModule() {
-        lastMessages = new HashMap<String, String>();
+        lastMessages = new HashMap<String, List<String>>();
         addPattern("(?:(.+): )?s/([^/]*)/([^/]*)[/]?", "doReplace");
         addPattern(".*", "log");
 
@@ -21,25 +17,39 @@ public class FindReplaceModule extends Module {
     }
 
     public void log(MessageEvent e, List<String> args) {
+        if (!lastMessages.containsKey(e.getUser().getNick())) {
+            List<String> list = new ArrayList<String>();
+            lastMessages.put(e.getUser().getNick(), list);
+        }
         if (!e.getMessage().matches("s/([^/]+)/([^/]+)[/]?")) {
-            lastMessages.put(e.getUser().getNick(), e.getMessage());
+            List<String> userMessages = lastMessages.get(e.getUser().getNick());
+            userMessages.add(e.getMessage());
+            int lookback = Integer.parseInt(MainBot.config.get("find-replace-lookback").toString());
+            while(userMessages.size() >= lookback) {
+                userMessages.remove(0);
+            }
+            lastMessages.put(e.getUser().getNick(), userMessages);
         }
     }
 
     public void doReplace(MessageEvent e, List<String> args) {
-        if (lastMessages.containsKey(e.getUser().getNick())) {
-            String name = args.get(0);
-            String from = args.get(1);
-            String to = args.get(2);
+        String name = args.get(0);
+        String from = args.get(1);
+        String to = args.get(2);
 
-            if (name == null) name = e.getUser().getNick();
-            if (from == null) from = "";
-            if (to == null) to = "";
+        if (name == null) name = e.getUser().getNick();
+        if (from == null) from = "";
+        if (to == null) to = "";
 
-            String lastMsg = lastMessages.get(name);
-
-            String replaced = lastMsg.replaceAll(from, to);
-            e.getChannel().send().message("What " + name + " meant: " + replaced);
+        if (lastMessages.containsKey(name)) {
+            List<String> lastMsg = lastMessages.get(name);
+            for (int i = lastMsg.size()-1; i >= 0; i--) {
+                String msg = lastMsg.get(i);
+                if (msg.contains(from)) {
+                    e.getChannel().send().message("What " + name + " meant: " + msg.replaceAll(from, to));
+                    return;
+                }
+            }
         }
     }
 }

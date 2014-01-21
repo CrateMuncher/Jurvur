@@ -60,7 +60,11 @@ public abstract class Module extends ListenerAdapter {
                     for (String arg : splittedList.subList(1, splittedList.size())) {
                         groups.add(arg);
                     }
-                    ph.handler.invoke(this, event, groups);
+                    try {
+                        ph.handler.invoke(this, event, groups);
+                    } catch (Exception ex) {
+                        event.getChannel().send().action("I oopsed :( [" + ex.getClass().getName() + ": " + ex.getMessage() + "]");
+                    }
                 }
             } else {
                 while (m.find()) {
@@ -71,7 +75,11 @@ public abstract class Module extends ListenerAdapter {
                 }
 
                 if (m.matches()) {
-                    ph.handler.invoke(this, event, groups);
+                    try {
+                        ph.handler.invoke(this, event, groups);
+                    } catch (Exception ex) {
+                        event.getChannel().send().action("I oopsed :( [" + ex.getClass().getName() + ": " + ex.getMessage() + "]");
+                    }
                 }
             }
         }
