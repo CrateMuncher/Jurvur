@@ -16,7 +16,7 @@ public class FindReplaceModule extends Module {
         addPattern("s/([^/]+)/([^/]+)[/]?", "doReplace");
         addPattern(".*", "log");
 
-        addHelpCommand("help", "Shows this.", "!help", "!help relevant");
+        addHelpFeature("Find and Replace", "Finds and replaces, with the syntax s/find/replace/.", "<You> This is a tset", "<You> s/tset/test", "What You meant: This is a test");
     }
 
     public void log(MessageEvent e, List<String> args) {
