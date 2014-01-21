@@ -71,6 +71,7 @@ public class MainBot extends ListenerAdapter {
                     pieces = pieces.subList(1, pieces.size());
                 }
                 if (obj != null) {
+                    System.out.println("Got override: " + adjustedK + ": " + JSONValue.parse(v));
                     obj.put(pieces.get(0), JSONValue.parse(v));
                 }
             }
