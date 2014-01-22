@@ -14,9 +14,9 @@ The preferred way to give the bot database info is making an environment variabl
 
 Where `<dbtype>` is either `postgres`, `sqlite` or `mysql`. Remember to add the appropriate driver to `config.json`, or just set it with the `JURVUR_DATABASE_DRIVER`. Again, remember to put what you need to set in quotes (so the actual content of the environment variable actually has quotes)
 The appropriate drivers are:
-    org.postgresql.Driver
-    com.mysql.jdbc.Driver
-    org.sqlite.JDBC
+    `org.postgresql.Driver`
+    `com.mysql.jdbc.Driver`
+    `org.sqlite.JDBC`
 
 # Running on Heroku
 Running Jurvur on Heroku is very simple. It already includes a Procfile that you need, and automatically grabs the database needed.
