@@ -14,7 +14,8 @@
         "net.jurvur.modules.GoodBadModule",
         "net.jurvur.modules.NoteModule",
         "net.jurvur.modules.FindReplaceModule",
-        "net.jurvur.modules.DiceModule"
+        "net.jurvur.modules.DiceModule",
+        "net.jurvur.modules.NooModule"
     ],
     "server-password": "",
     "find-replace-lookback": 5,
