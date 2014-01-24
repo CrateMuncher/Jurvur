@@ -78,7 +78,8 @@ public abstract class Module extends ListenerAdapter {
                     try {
                         ph.handler.invoke(this, event, groups);
                     } catch (Exception ex) {
-                        event.getChannel().send().action("I oopsed :( [" + ex.getClass().getName() + ": " + ex.getMessage() + "]");
+                        event.getChannel().send().action("I oopsed :( [" + ex.getCause().getClass().getName() + ": " + ex.getMessage() + "]");
+                        ex.printStackTrace();
                     }
                 }
             }
